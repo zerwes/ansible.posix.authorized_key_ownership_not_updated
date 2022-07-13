@@ -1,0 +1,7 @@
+---
+# defaults file for ansible.posix.authorized_key_ownership_not_updated
+
+authorized_keys_user: test
+authorized_keys_base_dir: /var/tmp/authorized_keys
+authorized_keys_options: command="/usr/bin/echo \"good riddance\""
+authorized_keys_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDp40I84oXo1/YyFjzgQB83DHnDIEWa1nSzCkjXYCd+DrW0QKc8C7BZDtTO/9D+P8Vcb0jgraKv1hX1TJjaO6qeLoxxMIn4LbhrpxPPT4sVXHyl2hAZeRoG0N+6OeosHZcYasTe4gDidGMuVwCs5dGzlRBpPHWjh1kqgOelTgqzcW0BDOnLmM+K60/JTns4dyP3UZxzoyMX28aMn2RkK5uvEEMq7Eb8zdJ/pndg3PM7uqRiOg+ZV/gqysbfRe0faPVyf4GyGpt6JiQ9fccGvAehIZ2u8ATl0mgT/xq/NFMOSVUYPuTkuGYN59K6Kz/ak3eYOUnceYPGArhAfeXR0Sgd"

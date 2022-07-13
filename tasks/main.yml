@@ -1,0 +1,81 @@
+---
+
+- name: ensure authorized_keys_base_dir
+  file:
+    path: "{{ authorized_keys_base_dir }}"
+    state: directory
+    mode: 0755
+
+- name: create user
+  user:
+    name: "{{ authorized_keys_user }}"
+    password: '!'
+
+- name: register userid
+  getent:
+    database: passwd
+    key: "{{ authorized_keys_user }}"
+
+- name: debug getent
+  debug:
+    var: ansible_facts.getent_passwd
+
+- name: configure SSH authorized_keys for {{ authorized_keys_user }}
+  authorized_key:
+    path: "{{ authorized_keys_base_dir }}/{{ authorized_keys_user }}/authorized_keys"
+    user: "{{ authorized_keys_user }}"
+    key: "{{ authorized_keys_key }}"
+    key_options: command="/usr/bin/sudo /usr/local/sbin/backup_client"
+    manage_dir: no
+    exclusive: yes
+
+- name: register status of authorized_key file
+  stat:
+    path: "{{ authorized_keys_base_dir }}/{{ authorized_keys_user }}/authorized_keys"
+  register: stat1
+
+- name: debug stat1
+  debug:
+    var: stat1
+
+- name: remove user
+  user:
+    name: "{{ authorized_keys_user }}"
+    state: absent
+
+- name: create interim user
+  user:
+    name: "{{ authorized_keys_user }}_xxx"
+    password: '!'
+
+- name: create user
+  user:
+    name: "{{ authorized_keys_user }}"
+    password: '!'
+
+- name: register userid
+  getent:
+    database: passwd
+    key: "{{ authorized_keys_user }}"
+
+- name: debug getent
+  debug:
+    var: ansible_facts.getent_passwd
+
+- name: configure SSH authorized_keys for {{ authorized_keys_user }}
+  authorized_key:
+    path: "{{ authorized_keys_base_dir }}/{{ authorized_keys_user }}/authorized_keys"
+    user: "{{ authorized_keys_user }}"
+    key: "{{ authorized_keys_key }}"
+    key_options: command="/usr/bin/sudo /usr/local/sbin/backup_client"
+    manage_dir: no
+    exclusive: yes
+
+- name: register status of authorized_key file
+  stat:
+    path: "{{ authorized_keys_base_dir }}/{{ authorized_keys_user }}/authorized_keys"
+  register: stat2
+
+- name: debug stat2
+  debug:
+    var: stat2
