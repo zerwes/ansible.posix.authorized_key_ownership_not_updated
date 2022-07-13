@@ -12,13 +12,12 @@
     password: '!'
 
 - name: register userid
-  getent:
-    database: passwd
-    key: "{{ authorized_keys_user }}"
+  command: id -u {{ authorized_keys_user }}
+  register: uid1
 
-- name: debug getent
+- name: debug uid1
   debug:
-    var: ansible_facts.getent_passwd
+    var: uid1.stdout
 
 - name: configure SSH authorized_keys for {{ authorized_keys_user }}
   authorized_key:
@@ -36,7 +35,7 @@
 
 - name: debug stat1
   debug:
-    var: stat1
+    var: stat1.stat.uid
 
 - name: remove user
   user:
@@ -54,13 +53,12 @@
     password: '!'
 
 - name: register userid
-  getent:
-    database: passwd
-    key: "{{ authorized_keys_user }}"
+  command: id -u {{ authorized_keys_user }}
+  register: uid2
 
-- name: debug getent
+- name: debug uid2
   debug:
-    var: ansible_facts.getent_passwd
+    var: uid2.stdout
 
 - name: configure SSH authorized_keys for {{ authorized_keys_user }}
   authorized_key:
@@ -71,11 +69,20 @@
     manage_dir: no
     exclusive: yes
 
+- name: remove interim user
+  user:
+    name: "{{ authorized_keys_user }}_xxx"
+    state: absent
+
 - name: register status of authorized_key file
   stat:
     path: "{{ authorized_keys_base_dir }}/{{ authorized_keys_user }}/authorized_keys"
   register: stat2
 
-- name: debug stat2
+- name: debug stat2 uid
   debug:
-    var: stat2
+    var: stat2.stat.uid
+
+- name: check uid match for user and authorized_key file
+  assert:
+    that: stat2.stat.uid == uid2.stdout
