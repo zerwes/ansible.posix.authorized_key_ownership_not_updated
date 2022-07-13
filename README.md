@@ -2,6 +2,7 @@
 POC for the bug that [ansible.posix.authorized_key](https://docs.ansible.com/ansible/latest/collections/ansible/posix/authorized_key_module.html)
 is not updating the UID of the authorized_keys file
 
+https://github.com/ansible-collections/ansible.posix/issues/379
 
 play:
 ```
